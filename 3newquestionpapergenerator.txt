@@ -1,0 +1,302 @@
+//users
+ create table users(FIRST_NAME varchar2(50),
+LAST_NAME varchar2(50),
+EMAIL varchar2(50),
+USER_ID varchar2(10) primary key,
+PASSWORD varchar2(10), 
+EMP_TYPE varchar2(1));
+
+//exam
+create table exam(examid varchar2(20) Primary key,examdescription varchar2(20),skillset varchar2(20),
+competencylevel varchar2(10),user_id varchar2(10) references users(user_id));
+ALTER TABLE exam modify competencylevel constraint chk_competencylevel check(competencylevel in ('1','2','3')) ;
+insert into exam values('ex1','mcq','java','1','user1');
+insert into exam values('ex2','mcq','html','2','user1');
+
+//assessment
+create table assessment(user_id varchar2(10) references users(user_id),
+examid varchar2(20) references exam(examid),examdescription varchar2(20),competencylevel varchar2(10),assessmentid number primary key,starttime timestamp,endtime timestamp);
+ALTER TABLE assessment modify competencylevel constraint chk_competency_level check(competencylevel in ('1','2','3')) ;
+alter table assessment add score number(3);
+insert into assessment values('user1','ex1','mcq','1',100,to_date('03-04-2019 16:00','DD-MM-yyyy HH24:MI'),to_date('03-04-2019 18:00','DD-MM-yyyy HH24:MI'));
+insert into assessment values('user2','ex2','mcq','2',101,to_date('03-04-2019 16:00','DD-MM-yyyy HH24:MI'),to_date('03-04-2019 18:00','DD-MM-yyyy HH24:MI'))
+
+
+//question
+create table question(questionid varchar2(10) Primary Key,questioncreator varchar2(15),
+question varchar2(500),choice1 varchar2(500), choice2 varchar2(500), choice3 varchar2(500),
+ choice4 varchar2(500),selection varchar2(1),skillset varchar2(20),competencylevel varchar2(10),marks number(3));
+alter table question add examid varchar2(20) references exam(examid);
+alter table question add answer varchar2(500);
+ALTER TABLE question modify competencylevel constraint chk_competency_level1 check(competencylevel in ('1','2','3')) ;
+insert into question values('q2','abc','what is html','language','scripting language','framework','programming language','R','java','1',1,'ex1','scripting language');
+insert into question values('q1','abc','what is java','language','scripting language','framework','programming language','R','java','1',1,'ex1','programming language');
+insert into question values('q3','abc','what is JVM','Java Virtual Machine','JavaScript Virtual Machine','Java Vending Machine','JSP Virtual Machine','R','java','1',1,'ex1','Java Virtual Machine');
+insert into question values('q4','abc','xml stands for','extensible markup language','extensive markup language','xtensible makeup language','xtensible mashup language','R','java','1',1,'ex1','extensible markup language');
+insert into question values('q5','abc','size of integer in java','1 byte','2 byte','3 byte','4 byte','R','java','1',1,'ex1','4 byte');
+insert into question values('q6','abc','size of float in java','1 byte','2 byte','3 byte','4 byte','R','java','1',1,'ex1','4 byte');
+insert into question values('q7','abc','size of char in java','1 byte','2 byte','3 byte','4 byte','R','java','1',1,'ex1','2 byte');
+insert into question values('q8','abc','size of boolean in java','1 bit','2 byte','3 byte','none of the above','R','java','1',1,'ex1','1 bit');
+insert into question values('q9','abc','size of double in java','1 byte','2 byte','4 byte','8 byte','R','java','1',1,'ex1','8 byte');
+insert into question values('q10','abc','java is platform independent','true','false',null,null,'R','java','1',1,'ex1','true');
+insert into question values('q11','abc','what is sql','language','scripting language','structure query language','programming language','R','java','1',1,'ex1','structure query language');
+insert into question values('q12','abc',' What is the process of defining two or more methods within same class that have same name but different parameters declaration?','method overloading','method overriding','method hiding','none of the mentioned','R','java','1',1,'ex1','method overloading');
+insert into question values('q13','abc',' Which of these can be overloaded?','methods','constructor','all of the mentioned','none of the mentioned','R','java','1',1,'ex1','all of the mentioned');
+insert into question values('q14','abc','  What is the process of defining a method in terms of itself, that is a method that calls itself?','polymorphism','abstraction','encapsulation','recursion','R','java','1',1,'ex1','recursion');
+insert into question values('q15','abc','class San
+{
+ public void m1 (int i,float f)
+ {
+  System.out.println(" int float method");
+ }
+ public void m1(float f,int i);
+  {
+  System.out.println("float int method");
+  }
+  public static void main(String[]args)
+  {
+    San s=new San();
+        s.m1(20,20);
+  }
+}','int float method','float int method',' run time error','compile time error','R','java','1',1,'ex1','compile time error');
+
+
+insert into question values('q16','abc','class overload 
+    {
+        int x;
+ 	int y;
+        void add(int a) 
+        {
+            x =  a + 1;
+        }
+        void add(int a, int b)
+        {
+            x =  a + 2;
+        }        
+    }    
+    class Overload_methods 
+    {
+        public static void main(String args[])
+        {
+            overload obj = new overload();   
+            int a = 0;
+            obj.add(6);
+            System.out.println(obj.x);     
+        }
+   }','5','6','7','8','R','java','1',1,'ex1','7');
+
+
+insert into question values('q17','abc','class overload 
+    {
+        int x;
+ 	int y;
+        void add(int a)
+        {
+            x =  a + 1;
+        }
+        void add(int a , int b)
+        {
+            x =  a + 2;
+        }        
+    }    
+    class Overload_methods 
+    {
+        public static void main(String args[])
+        {
+            overload obj = new overload();   
+            int a = 0;
+            obj.add(6, 7);
+            System.out.println(obj.x);     
+        }
+    }','5','6','7','8','R','java','1',1,'ex1','8');
+
+
+insert into question values('q18','abc','class overload 
+   {int x;double y;
+        void add(int a , int b) 
+      {x = a + b;}
+        void add(double c , double d)
+        {y = c + d;}
+        overload() 
+        {this.x = 0;
+            this.y = 0;}}    
+    class Overload_methods 
+    {public static void main(String args[])
+        { overload obj = new overload();   
+            int a = 2;
+            double b = 3.2;
+            obj.add(a, a);
+            obj.add(b, b);
+            System.out.println(obj.x + " " + obj.y);}}','6  6','6  6.4','6.4  6','4  6.4','R','java','1',1,'ex1','4  6.4')
+
+
+insert into question values('q19','abc','Which of these method of class String is used to compare two String objects for their equality ?','equals()',' Equals()','isequal()','Isequal()','R','java','1',1,'ex1','equals()');
+
+
+insert into question values('q20','abc','Which of these methods is used to compare a specific region inside a string with another specific region in another string?','regionMatch()','match()','RegionMatches()','regionMatches()','R','java','1',1,'ex1','regionMatches()');
+
+
+insert into question values('q21','abc',' In Iterator, hasMoreElements() method of Enumeration has been changed to:','hasNextElement()','isNext()','hasNext()','name remains same','C','java','1',1,'ex1','hasNext()');
+insert into question values('q22','abc','Which of the following methods does string API has','contains()','add()','equals()','hasNext()','C','java','1',1,'ex1','contains(),equals()');
+insert into question values('q23','abc','What ar the features of java:','robust','multithreaded','platform dependent','static','C','java','1',1,'ex1','robust,multithreaded');
+insert into question values('q24','abc','How can  we restrict inheritance for a class?:','by using final keyword','by  using private constructors','by using static keyword','by using public constructors','C','java','1',1,'ex1','by using final keyword,by using private constructors');
+insert into question values('q25','abc','What are the methods of object class?','clone()','finalize()','hashcode()','comparator()','C','java','1',1,'ex1','clone(),finalize(),hashcode()');
+insert into question values('q26','abc','Which of the following are access specifiers in java','restricted','final','protected','private','C','java','1',1,'ex1','protected,private');
+insert into question values('q27','abc','Which of the following statements are true','vector is not synchronized','vector is slow as it is thread safe','vector defines the increment size','vector does not defaults to doubling size of its array','C','java','1',1,'ex1','vector is slow as it is thread safe,vector defines the increment size');
+ insert into question values('q30','abc','which of the following are java primitive data types','byte','float','char','long double','C','java','1',1,'ex1','byte,float,char');
+
+
+//competency level2
+insert into question values('q31','abc','Which of the following is FALSE about arrays on Java','A java array is always an object','Length of array can be changed after creation of array','Arrays in Java are always allocated on heap','none of the mentioned','R','java','2',1,'ex1','Length of array can be changed after creation of array');
+insert into question values('q32','abc','Which of these class is superclass of String and StringBuffer class?','java.util','java.lang','ArrayList','None of the mentioned','R','java','2',1,'ex1','java.lang');
+insert into question values('q33','abc','Which of these operators can be used to concatenate two or more String objects?','+','+=','&','||','R','java','2',1,'ex1','+');
+insert into question values('q34','abc','Which of this method of class String is used to obtain a length of String object?','get()','Sizeof()','lengthof()','length()','R','java','2',1,'ex1','length()');
+insert into question values('q35','abc','Which of these method of class String is used to extract a single character from a String object?','CHARAT()','chatat()','charAt()','ChatAt()','R','java','2',1,'ex1','charAt()');
+insert into question values('q36','abc','Which of these constructors is used to create an empty String object?','String()','String(void)','String(0)','None of the mentioned','R','java','2',1,'ex1','String()');
+insert into question values('q37','abc','Which of these is an incorrect statement?','String objects are immutable, they cannot be changed','String object can point to some other reference of String variable','StringBuffer class is used to store string in a buffer for later use','None of the mentioned','R','java','2',1,'ex1','StringBuffer class is used to store string in a buffer for later use');
+insert into question values('q38','abc','Which of these keywords are used to define an abstract class?','abst','abstract','Abstract','abstract class','R','java','2',1,'ex1','abstract');
+insert into question values('q39','abc','Which of these is not abstract?','Thread','AbstractList','List','None of the Mentioned','R','java','2',1,'ex1','Thread');
+insert into question values('q40','abc',' If a class inheriting an abstract class does not define all of its function then it will be known as?','Abstract','A simple class','Static class','None of the Mentioned','R','java','2',1,'ex1','Abstract');
+insert into question values('q41','abc','Which of these packages contains abstract keyword?','java.lang','java.util','java.io','java.system','R','java','2',1,'ex1','java.lang');
+insert into question values('q42','abc','Which of these keywords is used to define interfaces in Java?','interface','Interface','intf','Intf','R','java','2',1,'ex1','interface');
+insert into question values('q43','abc','Which of these can be used to fully abstract a class from its implementation?','Objects','Packages','Interfaces','None of the Mentioned','R','java','2',1,'ex1','Interfaces');
+insert into question values('q44','abc','Which of these access specifiers can be used for an interface?','Public','Protected','private','All of the mentioned','R','java','2',1,'ex1','Public');
+insert into question values('q45','abc','Which of these keywords is used by a class to use an interface defined previously?','import','Import','implements','Implements','R','java','2',1,'ex1','implements');
+insert into question values('q46','abc','Which of the following is the correct way of implementing an interface salary by class manager?','class manager extends salary {}','class manager implements salary {}','class manager imports salary {}','none of the mentioned','R','java','2',1,'ex1','class manager implements salary {}');
+insert into question values('q47','abc','Which of the following is an incorrect statement about packages?','Interfaces specifies what class must do but not how it does','Interfaces are specified public if they are to be accessed by any code in the program',' All variables in interface are implicitly final and static','All variables are static and methods are public if interface is defined pubic','R','java','2',1,'ex1','All variables are static and methods are public if interface is defined pubic');
+insert into question values('q48','abc','Which of the following keywords is used for throwing exception manually?','finally','try','throw','catch','R','java','2',1,'ex1','throw');
+insert into question values('q49','abc','What is the method present in Comparator interface?','compareTo','equals','compare','none of the above','C','java','2',1,'ex1','equals,compare');
+insert into question values('q50','abc','Which of the following are access specifiers in java','restricted','final','protected','private','C','java','2',1,'ex1','protected,private');
+
+//competency level 3
+insert into question values('q51','abc','In java thread is created by','Extending the thread class','Implementing Runnable interface.','Both of the above','None of these','R','java','3',1,'ex1','Both of the above');
+insert into question values('q52','abc',' JUnits are used for which type of testing?','Unit Testing','Integration Testing','System Testing','Blackbox Testing','R','java','3',1,'ex1','Unit Testing');
+insert into question values('q53','abc','In java thread is created by','','','System Testing','Blackbox Testing','R','java','3',1,'ex1','Both of the above');
+insert into question values('q54','abc','Which of the below is an incorrect annotation with respect to JUnits?','@Test','@BeforeClass','@Junit','@AfterEach','R','java','3',1,'ex1','@Junit');
+insert into question values('q55','abc',' Which of the following operators is used to generate instance of an exception which can be thrown using throw?','thrown','alloc','malloc','new','R','java','3',1,'ex1','new');
+insert into question values('q56','abc',' Which of the following handles the exception when a catch is not used?','finally','throw handler','default handler','java run time system','R','java','3',1,'ex1','default handler');
+insert into question values('q57','abc','Which part of code gets executed whether exception is caught or not?','finally','try','catch','throw','R','java','3',1,'ex1','finally');
+insert into question values('q58','abc','Which of these method can be used to increase the capacity of ArrayList object manually?','Capacity()','increaseCapacity()','increasecapacity()','ensureCapacity()','R','java','3',1,'ex1','ensureCapacity()');
+insert into question values('q59','abc','Which of these methods can be used to obtain a static array from an ArrayList object?','Array()','covertArray()','toArray()','covertoArray()','R','java','3',1,'ex1','toArray()');
+insert into question values('q60','abc','What is the output of this program?
+
+    class Output 
+    {
+        public static void main(String args[]) 
+        {
+            ArrayList obj = new ArrayList();
+            obj.add("A");
+            obj.add("D");
+            obj.ensureCapacity(3);
+            obj.trimToSize();
+            System.out.println(obj.size());
+         }      
+    }','1','2','3','4','R','java','3',1,'ex1','2');
+insert into question values('q61','abc','Which of these interface handle sequences?','Set','List','Comparator','Collection','R','java','3',1,'ex1','List');
+insert into question values('q62','abc','Which of these is static variable defined in Collections?','EMPTY_SET','EMPTY_LIST','EMPTY_MAP','All of the mentioned','R','java','3',1,'ex1','All of the mentioned');
+insert into question values('q63','abc','Which of these method of HashSet class is used to add elements to its object?','add()','Add()','addFirst()','insert()','R','java','3',1,'ex1','add()');
+insert into question values('q64','abc','What is the output of this program?
+
+    import java.util.*;
+    class Linkedlist 
+    {
+        public static void main(String args[]) 
+        {
+            LinkedList obj = new LinkedList();
+            obj.add("A");
+            obj.add("B");
+            obj.add("C");
+            obj.addFirst("D");
+            System.out.println(obj);
+        }
+    }','[A, B, C].','[D, B, C].','[A, B, C, D].','[D, A, B, C].','R','java','3',1,'ex1','[D, A, B, C].');
+insert into question values('q65','abc','Which one of the following contains date information?','java.sql.TimeStamp','java.sql.Time','java.io.Time','java.io.TimeStamp','R','java','3',1,'ex1','java.sql.TimeStamp');
+insert into question values('q66','abc','Which of the following is used to call stored procedure?','Statement','PreparedStatement','CallableStatment','CalledStatement','R','java','3',1,'ex1','CallableStatment');
+insert into question values('q67','abc','Which of the following is method of JDBC batch process?','setBatch()','deleteBatch()','removeBatch()','addBatch()','R','java','3',1,'ex1','addBatch()');
+insert into question values('q68','abc','Which of the following code is used to get an attribute in a HTTP Session object in servlets?','session.getAttribute(String name)','session.alterAttribute(String name)','session.updateAttribute(String name)','session.setAttribute(String name)','R','java','3',1,'ex1','session.getAttribute(String name)');
+insert into question values('q69','abc','Which one is the correct order of phases in JSP life cycle?','Initialization, Cleanup, Compilation, Execution','Initialization, Compilation, Cleanup, Execution','Compilation, Initialization, Execution, Cleanup','Cleanup, Compilation, Initialization, Execution','R','java','3',1,'ex1','Compilation, Initialization, Execution, Cleanup');
+insert into question values('q70','abc','Which is not a directive?','include','page','export','useBean','R','java','3',1,'ex1','exports');
+
+//skill set-html
+//competency level 1
+insert into question values('q1','abc','Which attribute specifies a unique alphanumeric identifier to be associated with an element?','class','id','article','html','R','html','1',1,'ex1','id');
+insert into question values('q2','abc','The _____________ attribute specifies an inline style associated with an element, which determines the rendering of the affected element.','dir','style','class','article','R','html','1',1,'ex1','style');
+insert into question values('q3','abc','Which attribute is used to provide an advisory text about an element or its contents?','tooltip','dir','title','head','R','html','1',1,'ex1','title');
+insert into question values('q4','abc','The __________ attribute sets the text direction as related to the lang attribute.','lang','sub','dir','ds','R','html','1',1,'ex1','dir');
+insert into question values('q5','abc',' Which of the following is the attribute that specifies the column name from the data source object that supplies the bound data?','dataFormatAs','datafld','disabled','datasrc','R','html','1',1,'ex1','datafld');
+insert into question values('q6','abc','Which of the following is the attribute that indicates the name of the data source object that supplies the data that is bound to this element?','dataFormatAs','datafld','disabled','datasrc','R','html','1',1,'ex1','datasrc');
+insert into question values('q7','abc','Which of the following is the attribute that specifies additional horizontal space, in pixels, to be reserved on either side of an embedded item like an iframe, applet, image, and so on?','height','hspace','hidefocus','datasrc','R','html','1',1,'ex1','hspace');
+insert into question values('q8','abc','The accesskey attribute specifies a keyboard navigation accelerator for the element.','true','false','null','null','R','html','1',1,'ex1','true');
+insert into question values('q9','abc','Which of the following is the attribute that is used to set a global identifier for a microdata item?','key','id','itemclass','itemid','R','html','1',1,'ex1','itemid');
+insert into question values('q10','abc','Which of the following is the attribute that is used to add a name/value pair to a microdata item?','itemscope','itemref','itemprop','itemid','R','html','1',1,'ex1','itemprop');
+insert into question values('q11','abc','Which of the following prints bold letters in traditional HTML?  i. <B>Go boldly</B>
+ii. <B>Go boldly</b>
+iii. <b>Go boldly</B>
+iv. <b>Go boldly</b>','iv','i','i, ii, iii, and iv','both iv and i','R','html','1',1,'ex1','both iv and i');
+insert into question values('q12','abc','XHTML is case insensitive and HTML is case sensitive.','true','false','null','null','R','html','1',1,'ex1','false');
+insert into question values('q13','abc','HTML uses','User defined tags','Pre-specified tags','Fixed tags defined by the language','Tags only for linking','R','html','1',1,'ex1','Fixed tags defined by the language');
+insert into question values('q14','abc','Apart from <b> tag, what other tag makes text bold ?','<fat>','<strong>','<black>','<emp>','R','html','1',1,'ex1','<strong>');
+insert into question values('q15','abc','What is the full form of HTML?','HyperText Markup Language','Hyper Teach Markup Language','Hyper Tech Markup Language','None of these','R','html','1',1,'ex1','HyperText Markup Language');
+insert into question values('q16','abc','What should be the first tag in any HTML document?','<head>','<title>','<html>','<document>','R','html','1',1,'ex1','<html>');
+insert into question values('q17','abc','How can you make a bulleted list with numbers?','<dl>','<ol>','<list>','<ul>','R','html','1',1,'ex1','<ol>');
+insert into question values('q18','abc','What tag is used to display a picture in a HTML page?','picture','image','img','src','R','html','1',1,'ex1','img');
+insert into question values('q19','abc','Which of these is correct?','style="text-align:center;"','style:"text-align=center;"','"text-align:center;"','style="text-align:center;"','style="text-align:center"','C','html','1',1,'ex1','style="text-align:center;",style="text-align:center"');
+
+
+//skillset-html//competency level 2
+
+insert into question values('q20','abc','HTML is a subset of','SGMD','SGML','SGMH','none of the mentioned','R','html','2',1,'ex1','SGML');
+insert into question values('q21','abc','HTML tags are enclosed in what ?','##','{}','<>','[]','R','html','2',1,'ex1','<>');
+insert into question values('q23','abc','<a> and </a> are the tags used for','adding image','adding text','audio voiced text','adding links to the page','R','html','2',1,'ex1','adding links to the page');
+insert into question values('q24','abc','To add a plain color background to your web page, use which of the following ?','<body bgcolor= “36,24,35”>',' <body color= “# FF000”>','<body bgcolor= “# FF000”>','All of the mentioned options','R','html','2',1,'ex1','<body bgcolor= “# FF000”>');
+insert into question values('q25','abc','The BODY tag is usually used after','HTML tag','HEAD tag','TITLE tag','EM tag','R','html','2',1,'ex1','HEAD tag');
+insert into question values('q26','abc','Choose the correct HTML tag to make a text italic','<i>','<italic>','<it>','<il>','R','html','2',1,'ex1','<i>');
+insert into question values('q27','abc','What does the <br> tag add to your webpage ?','Long break','paragraph break','Line break','none of the mentioned','R','html','2',1,'ex1','Line break');
+insert into question values('q28','abc','Adding a border to your image helps the visitor to recognize it as what ?
+','A frame','A link','An image','none of the mentioned','R','html','2',1,'ex1','A link');
+insert into question values('q29','abc','Choose the correct HTML tag for the largest heading','<h1>','<h2>','<h5>','<h6>','R','html','2',1,'ex1','<h1>');
+insert into question values('q30','abc',' Which tag will add rows to your tables ?','<tr></tr>','<th></th>','<td></td?','<table></table/>','R','html','2',1,'ex1','<tr></tr>');
+insert into question values('q31','abc','To start a list using circles, use','<ul “round”>','<ul type=”circle”>','<ul type=”round”>','<ul type=”round”>','R','html','2',1,'ex1','<ul type=”circle”>');
+insert into question values('q32','abc','HTML is a subset of','SGMD','SGML','SGMH','none of the mentioned','R','html','2',1,'ex1','SGML');
+insert into question values('q33','abc',HTML describes webpage's structure by using','Constructs','Domains','Markup','Tools','R','html','2',1,'ex1','Markup');
+insert into question values('q34','abc','In HTML document,visible part starts from declaration of','<!DOCTYPE html>','<p>','<html>','<body>','R','html','2',1,'ex1','<!DOCTYPE html>');
+insert into question values('q35','abc','Terminology that is not displayed by a browser is called','HTML tags','Layout','Page margins','Page Tables','R','html','2',1,'ex1','HTML tags');
+insert into question values('q36','abc','Which of the following attributes are related to font tag?','size','face','color','none of the mentioned','C','html','2',1,'ex1','size,color,face');
+insert into question values('q37','abc','Which of the following tags are used in html','<br>','<imq>','<quit>','none of the mentioned','C','html','2',1,'ex1','<br>,<img>');
+
+//skillset-html//competency level 3
+insert into question values('q38','abc','Which attribute is used with img tag to display the text if image could not load in browser?','description','name','alt','id','R','html','1',1,'ex1','alt');
+insert into question values('q39','abc',' Marquee is a tag in HTML to','mark the list of items to maintain inqueue','Mark the text so that it is hidden in browser','Display text with scrolling effect','None of above','R','html','1',1,'ex1','Display text with scrolling effect');
+insert into question values('q39','abc',' To create a blank line in your web page','press Enter two times','press Shift + Enter','insert &lt;BR&gt; tag','insert &lt;BLINE&gt;','R','html','1',1,'ex1','insert &lt;BR&gt; tag');
+insert into question values('q40','abc',' Which of the following are  valid alignment attributes?','right','left','top','none of the mentioned','C','html','1',1,'ex1','right,left');
+insert into question values('q41','abc',' Which of the following property is used to determine which drag operation was desired?','dragend','getData','dropEffect','captureData','R','html','1',1,'ex1','dropEffect');
+insert into question values('q42','abc','The tag which allows you to nest other HTML tags within the description','<CAPTION>','<TD>','<TR>','<TH>','R','html','1',1,'ex1','<CAPTION>');
+insert into question values('q43','abc','What does vlink attribute mean?','visited link','virtual link','very good link','active link','R','html','1',1,'ex1','visited link');
+insert into question values('q44','abc','Which tag creates a check box for a form in HTML?','<checkbox>','<input type="checkbox">','<input=checkbox>','<input checkbox>','R','html','1',1,'ex1','<input type="checkbox">');
+insert into question values('q45','abc','To create a combo box (drop down box) which tag will you use?','<select>','<list>','<input type="dropdown">','all of the above','R','html','1',1,'ex1','<select>');
+insert into question values('q46','abc','Which HTML tag would be used to display power in expression (A+B)2 ?','<SUP>','<SUB>','<B>','<P>','R','html','1',1,'ex1','<SUP>');
+insert into question values('q47','abc','Choose the correct HTML code to create an email link','<A HREF="admin@abc.com"></A>','<A HREF="admin:suresh@abc.com"></A>',<MAIL>admin@ABC.com </MAIL>','<MAILHREF = “admin@ABC.com”>','R','html','1',1,'ex1','<A HREF="admin:suresh@abc.com"></A>');
+insert into question values('q48','abc','Which attribute is used with img tag to display the text if image could not load in browser?','description','name','alt','id','R','html','1',1,'ex1','alt');
+insert into question values('q49','abc',' In HTML, Uniform Resource Identifier (URI) is used to','To create a frame document','To create a image map in the webpage.','To customize the image in the webpage.','To identify a name or a resource on the internet.','R','html','1',1,'ex1','To identify a name or a resource on the internet.');
+insert into question values('q50','abc','What is the use of Forms in HTML?','to display contents of email.','to display animation effect.','to collect user’s input','None of the Above','R','html','1',1,'ex1','to collect user’s input');
+insert into question values('q51','abc','What is the use of iframe in HTML?','to display a web page within a web page','to display a web page with animation effect','to display a web page without browser','to display a web page without browser','R','html','1',1,'ex1','to display a web page within a web page');
+insert into question values('q52','abc','Which HTML Tag will use to scroll a text in web page?','<marquee> … </marquee>','<scroll> … </scroll>','<round> … </round>','<go> …</go>','R','html','1',1,'ex1','<marquee> … </marquee>');
+insert into question values('q53','abc','How to set a picture as a background web page?','<body background= “bgimage.gif”>','<body background image= “bgimage.gif”>','<background= “bgimage.gif”>','<background image= “bgimage.gif”>','R','html','1',1,'ex1','<body background= “bgimage.gif”>');
+insert into question values('q54','abc','Is it possible to insert a table within another table?','Yes, but there must be exactly 2 rows and 2 columns in first table.','Yes, table can be inserted into cell of another table.','Yes, but there must be no border in second table.','No, it’s not possible.','C','html','1',1,'ex1','Yes, table can be inserted into cell of another table.');
+insert into question values('q55','abc','HTML document is saved using ____ extension','.htl','.html','.hml','.htnl ','R','html','1',1,'ex1','.html');
+
+
+
+
+
+
+
+
+//skype wala users
+
+create table users(first_name char(50),last_name char(50),email varchar(50),user_id varchar(10) not null,password varchar(15),emptype char(1),
+constraint chk_emptype check(emptype in('U','A','a','u')),constraint Users_pk primary key(user_id)); 
+insert into users values('aaaa','aaaa','aaaa@gmail.com','user1','user1','U');
+insert into users values('bbbb','bbbb','bbbb@gmail.com','user2','user2','U');
+//time
+
